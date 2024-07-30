@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+google_credentials
+
 # Distribution / packaging
 .Python
 build/
