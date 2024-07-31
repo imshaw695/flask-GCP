@@ -63,6 +63,6 @@ pip3 install -r app/requirements.txt
 
 # Start the Flask app
 echo "Starting the Flask app..."
-gunicorn --bind 0.0.0.0:5000 app:app
+gunicorn --bind 0.0.0.0:5000 app.app:app
 
 echo "Startup script completed."

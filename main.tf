@@ -9,6 +9,8 @@ resource "google_compute_instance" "flask-app" {
   machine_type = "e2-micro"
   zone         = "europe-west2-a"  # Zone in the UK (London) region
 
+  tags = ["flask-app"]
+
   boot_disk {
     initialize_params {
       image = "ubuntu-2004-focal-v20210720"
@@ -31,6 +33,19 @@ resource "google_compute_instance" "flask-app" {
   }
 
   metadata_startup_script = file("${path.module}/startup-script.sh")
+}
+
+resource "google_compute_firewall" "allow-flask-app" {
+  name    = "allow-flask-app"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["5000"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["flask-app"]
 }
 
 output "instance_ip" {
