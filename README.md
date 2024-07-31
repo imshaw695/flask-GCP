@@ -104,3 +104,17 @@ git clone git@github.com:imshaw695/flask-GCP.git /opt/flask-app
 
 
 - These lines let you see the logs of the startup-script.ssh:
+
+
+# Docker
+- In order to containerise it, we need to create a Dockerfile then push the docker image to the Google Container Registry:
+- When you have a dockerile, run:  docker build -t flask-app .
+- Once the image is built, you can test it locally with this command:  docker run -p 5000:5000 flask-app
+- If you're happy, you can push it to the registry with these commands:
+This first command will take you to google auth screen to login
+gcloud auth login
+gcloud config set project flask-gcp-431011 # replace with your project id from the google cloud console
+
+if you get a warning about the active project not matching the quota project, you can use this command:
+gcloud auth application-default set-quota-project flask-gcp-431011 # replace with your project id from the google cloud console
+
