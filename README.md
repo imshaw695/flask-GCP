@@ -76,3 +76,31 @@ Click Enable
 - We can use this repo to create a hard stop, so if we reach £x of spend on a project, we can remove it from the billing account. This will mean the services shut down, so needs to be used carefully.
 - https://github.com/Cyclenerd/poweroff-google-cloud-cap-billing
 
+# Git keys for private repo
+- generate key with this: ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+- Add the public key to your GitHub account:
+Go to GitHub > Settings > SSH and GPG keys > New SSH key.
+Add the public key (~/.ssh/id_rsa.pub).
+Include the Private Key in Metadata:
+Include the private key in your startup script. Be sure to encode the key to avoid issues with formatting.
+
+# DEBUGGING:
+- I found these lines of code very useful. I would SSH into the built instance via the GCP console and type them in to see where it is going wrong (some lines need to be configured):
+SECRET_NAME="github-ssh-key"
+PROJECT_ID="flask-gcp-431011"
+SECRET_VERSION="latest"
+PRIVATE_KEY=$(gcloud secrets versions access ${SECRET_VERSION} --secret=${SECRET_NAME})
+echo "${PRIVATE_KEY}"
+
+mkdir -p ~/.ssh
+echo "${PRIVATE_KEY}" > ~/.ssh/id_rsa
+chmod 600 ~/.ssh/id_rsa
+
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+git clone git@github.com:imshaw695/flask-GCP.git /opt/flask-app
+
+#!/bin/bash
+
+
+- These lines let you see the logs of the startup-script.ssh:

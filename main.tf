@@ -21,20 +21,16 @@ resource "google_compute_instance" "flask-app" {
     }
   }
 
+  service_account {
+    email  = "flask-service-account@flask-gcp-431011.iam.gserviceaccount.com"
+    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+  }
+
   metadata = {
     enable-serial-console = "true"
   }
 
-  metadata_startup_script = <<-EOF
-    #!/bin/bash
-    apt-get update
-    apt-get install -y python3 python3-pip git
-    pip3 install flask
-    git clone https://github.com/imshaw695/flask-GCP.git /opt/flask-app
-    cd /opt/flask-app
-    pip3 install -r requirements.txt
-    gunicorn --bind 0.0.0.0:5000 app:app
-  EOF
+  metadata_startup_script = file("${path.module}/startup-script.sh")
 }
 
 output "instance_ip" {
